@@ -18,15 +18,16 @@ import java.util.concurrent.Semaphore;
 class RUDPServer
 {
 
+    static int win_size = 10;
     static int timeoutVal = 300;		// 300ms until timeout
-    Timer timer;
-    int base;					// base sequence number of window
-    int nextSeqNum;				// next sequence number in window
+    static Timer timer;
+    static int base;					// base sequence number of window
+    static int nextSeqNum;				// next sequence number in window
     static BufferedReader getLine;  //reads user lines from text file
 
     /*Not so sure about semaphore*/
     Semaphore s;				// guard CS for base, nextSeqNum
-    boolean isTransferComplete;         	// if receiver has completely received the file
+    static boolean isTransferComplete;         	// if receiver has completely received the file
 
     boolean inThreadDone = true;
     boolean outThreadDone = true;
@@ -54,6 +55,24 @@ class RUDPServer
 
             userInput = getLine.readLine();
 
+            //server receives request from client
+            byte[] buf = new byte[256];
+            DatagramPacket packet = new DatagramPacket(buf, buf.length);
+            /*FIXME*/welcomeSocket.receive(packet);
+
+            //server response after receiving client request
+            while (!isTransferComplete){
+
+                //sends packet if window is not full
+                if(nextSeqNum < base + win_size){
+                    //doSomething
+                }
+
+                if(base == nextSeqNum){
+                    setTimer(true); //if first packet of window
+                }
+            }
+
         }
 
         //server receives request from client
@@ -61,20 +80,33 @@ class RUDPServer
         DatagramPacket packet = new DatagramPacket(buf, buf.length);
         /*FIXME*/welcomeSocket.receive(packet);
 
+        //server response after receiving client request
+        while (!isTransferComplete){
+
+            //sends packet if window is not full
+            if(nextSeqNum < base + win_size){
+                //doSomething
+            }
+
+            if(base == nextSeqNum){
+                setTimer(true); //if first packet of window
+            }
+        }
+
     }
 
 
-//    //FIXME
-//    // to start or stop the timer
-//    public void setTimer(boolean isNewTimer) {
-//        if (timer != null) {
-//            timer.cancel();
-//        }
-//        if (isNewTimer) {
-//            timer = new Timer();
-//            timer.schedule(new Timeout(), timeoutVal);
-//        }
-//    }
+    //FIXME
+    // to start or stop the timer
+    public static void setTimer(boolean isNewTimer) {
+        if (timer != null) {
+            timer.cancel();
+        }
+        if (isNewTimer) {
+            timer = new Timer();
+            timer.schedule(new Timeout(), timeoutVal);
+        }
+    }
 //
 //    //FIXME
 //    // Timeout task
