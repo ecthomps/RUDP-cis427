@@ -12,7 +12,7 @@ class RUDPClient
     public static void main(String argv[]) throws Exception
     {
 
-        DatagramSocket socket = null;
+        DatagramSocket socket = new DatagramSocket();
         byte[] buf = new byte[256];
         DatagramPacket rcvPacket = new DatagramPacket(buf, buf.length);
 

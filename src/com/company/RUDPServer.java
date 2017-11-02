@@ -2,8 +2,6 @@ package com.company;
 
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -23,6 +21,7 @@ class RUDPServer
     static int base;					// base sequence number of window
     static int nextSeqNum = 0;                // next sequence number in window
     static BufferedReader getLine;  //reads user lines from text file
+    static byte[] sendData = new byte[256];
 
     /*Not so sure about semaphore*/
     Semaphore s;				// guard CS for base, nextSeqNum
@@ -35,20 +34,22 @@ class RUDPServer
     public static void main(String[] args) throws IOException {
 
         String userInput = "";
-        //String outToClient = "";
-        DatagramSocket skt = new DatagramSocket();
-        //String dString = null;
 
         //opens a bufferedReader on a file name alice.txt
-        try {
-            BufferedReader inputStream = new BufferedReader(new FileReader("alice.txt"));
-            getLine = inputStream;
-        } catch (FileNotFoundException e) {
-            System.err.println("Couldn't open quote file.  Serving time instead.");
-        }
+//        try {
+//            BufferedReader inputStream = new BufferedReader(new FileReader("alice.txt"));
+//            getLine = inputStream;
+//
+//        } catch (FileNotFoundException e) {
+//            System.err.println("Couldn't open quote file.  Serving time instead.");
+//        }
+
+
+        DatagramSocket skt = new DatagramSocket(9876);
+        byte[] sendData = new byte[1024];
 
         //server receives request from client
-        byte[] buf = userInput.getBytes();
+        byte[] buf = new byte[1024];
         DatagramPacket packet = new DatagramPacket(buf, buf.length);
         //copies info from client into pkt
         skt.receive(packet);
@@ -58,7 +59,6 @@ class RUDPServer
         int port = packet.getPort();
         packet = new DatagramPacket(buf, buf.length, address, port);
         skt.send(packet);
-
 
         while (true) {
 
