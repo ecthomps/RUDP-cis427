@@ -5,8 +5,9 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.*;
-import java.util.Date;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.util.Timer;
 import java.util.concurrent.Semaphore;
 
@@ -20,7 +21,7 @@ class RUDPServer
     static int timeoutVal = 300;		// 300ms until timeout
     static Timer timer;
     static int base;					// base sequence number of window
-    static int nextSeqNum;				// next sequence number in window
+    static int nextSeqNum = 0;                // next sequence number in window
     static BufferedReader getLine;  //reads user lines from text file
 
     /*Not so sure about semaphore*/
@@ -33,126 +34,43 @@ class RUDPServer
 
     public static void main(String[] args) throws IOException {
 
-        String userInput= "";
-        String outToClient = "";
+        String userInput = "";
+        //String outToClient = "";
         DatagramSocket skt = new DatagramSocket();
-        String dString = null;
-
-        //create socket at port 6789 to communicate with all clients
-        ServerSocket welcomeSocket = new ServerSocket(6789);
-        Socket connectionSocket = welcomeSocket.accept();
+        //String dString = null;
 
         //opens a bufferedReader on a file name alice.txt
         try {
             BufferedReader inputStream = new BufferedReader(new FileReader("alice.txt"));
             getLine = inputStream;
-        }
-        catch (FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             System.err.println("Couldn't open quote file.  Serving time instead.");
         }
 
+        //server receives request from client
+        byte[] buf = userInput.getBytes();
+        DatagramPacket packet = new DatagramPacket(buf, buf.length);
+        //copies info from client into pkt
+        skt.receive(packet);
 
-        while(true){
+        //sends response to Client over DatagramSocket
+        InetAddress address = packet.getAddress();
+        int port = packet.getPort();
+        packet = new DatagramPacket(buf, buf.length, address, port);
+        skt.send(packet);
 
-            userInput = getLine.readLine();
 
-            //server receives request from client
-            byte[] buf = userInput.getBytes();
-            DatagramPacket packet = new DatagramPacket(buf, buf.length);
+        while (true) {
 
-            //copies info from client into pkt
-            skt.receive(packet);
+            String sentence = new String(packet.getData());
+            System.out.println("RECEIVED: " + sentence);
+            System.out.println(nextSeqNum + packet.getLength());
 
-            if (userInput == null)
-                dString = new Date().toString();
-            else{
-                dString = getLine.readLine();
-                /*FIXME*/ outToClient.writeBytes(String.format("%04d", nextSeqNum) + userInput);
-                //System.out.println(String.format("%04d", nextSeqNum) + '\n');
-                System.out.println(new String(packet.getData()));
-                /*FIXME*/ nextSeqNumm += buf.length;
-            }
-
-            //converts String into an array
-            buf = dString.getBytes();
-
-            //sends response to Client over DatagramSocet
-            InetAddress address = packet.getAddress();
-            int port = packet.getPort();
-            packet = new DatagramPacket(buf, buf.length, address, port);
-            skt.send(packet);
+            nextSeqNum += packet.getLength();
+            //userInput = getLine.readLine();
 
             skt.close();
-
-//            //server response after receiving client request
-//            while (!isTransferComplete){
-//
-//                //sends packet if window is not full
-//                if(nextSeqNum < base + win_size){
-//                    //doSomething
-//                }
-//
-//                if(base == nextSeqNum){
-//                    setTimer(true); //if first packet of window
-//                }
-//            }
-
-        }
-
-        //server receives request from client
-        byte[] buf = new byte[256];
-        DatagramPacket packet = new DatagramPacket(buf, buf.length);
-        /*FIXME*/welcomeSocket.receive(packet);
-
-        //server response after receiving client request
-        while (!isTransferComplete){
-
-            //sends packet if window is not full
-            if(nextSeqNum < base + win_size){
-                //doSomething
-            }
-
-            if(base == nextSeqNum){
-                setTimer(true); //if first packet of window
-            }
-        }
-
-    }
-
-
-    //FIXME
-    // to start or stop the timer
-    public static void setTimer(boolean isNewTimer) {
-        if (timer != null) {
-            timer.cancel();
-        }
-        if (isNewTimer) {
-            timer = new Timer();
-            timer.schedule(new Timeout(), timeoutVal);
         }
     }
-//
-//    //FIXME
-//    // Timeout task
-//    public class Timeout extends TimerTask {
-//
-//        public void run() {
-//            try {
-//                s.acquire();
-//                /**
-//                 * *** enter CS ****
-//                 */
-//                System.out.println("Sender: Timeout!");
-//                nextSeqNum = base;	// resets nextSeqNum
-//                s.release();
-//                /**
-//                 * *** leave CS ****
-//                 */
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }// END CLASS Timeout
-
 }
 
