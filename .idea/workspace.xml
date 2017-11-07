@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="aa0479a7-917a-4a32-803a-19773e34d76e" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/company/Segment.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/RUDP/com/company/STSClient.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/RUDP/com/company/STSServer.class" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/company/RUDPClient.java" afterPath="$PROJECT_DIR$/src/com/company/RUDPClient.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/company/RUDPServer.java" afterPath="$PROJECT_DIR$/src/com/company/RUDPServer.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -28,7 +23,7 @@
             <entry file="file://$PROJECT_DIR$/src/com/company/RUDPServer.java">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="52">
-                  <caret line="67" column="9" lean-forward="true" selection-start-line="67" selection-start-column="9" selection-end-line="67" selection-end-column="9" />
+                  <caret line="66" column="9" lean-forward="true" selection-start-line="66" selection-start-column="9" selection-end-line="66" selection-end-column="9" />
                   <folding />
                 </state>
               </provider>
@@ -51,8 +46,8 @@
           <file leaf-file-name="RUDPClient.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/com/company/RUDPClient.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="238">
-                  <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+                <state relative-caret-position="34">
+                  <caret line="7" column="25" lean-forward="true" selection-start-line="7" selection-start-column="25" selection-end-line="7" selection-end-column="25" />
                   <folding>
                     <element signature="imports" expanded="true" />
                   </folding>
@@ -96,8 +91,8 @@
         <option value="$PROJECT_DIR$/src/com/company/STSServer.java" />
         <option value="$PROJECT_DIR$/src/com/company/Segment.java" />
         <option value="$USER_HOME$/Downloads/cis427/NIT_RUDPClient.java" />
-        <option value="$PROJECT_DIR$/src/com/company/RUDPServer.java" />
         <option value="$PROJECT_DIR$/src/com/company/RUDPClient.java" />
+        <option value="$PROJECT_DIR$/src/com/company/RUDPServer.java" />
       </list>
     </option>
   </component>
@@ -471,7 +466,14 @@
       <option name="project" value="LOCAL" />
       <updated>1509658499122</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="complete clientServer">
+      <created>1510032632671</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1510032632671</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -515,7 +517,8 @@
     <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <MESSAGE value="established seqAckNum btn clientNServer" />
     <MESSAGE value="clientServerCrashed" />
-    <option name="LAST_COMMIT_MESSAGE" value="clientServerCrashed" />
+    <MESSAGE value="complete clientServer" />
+    <option name="LAST_COMMIT_MESSAGE" value="complete clientServer" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -660,21 +663,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/company/RUDPClient.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/company/RUDPServer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="52">
-          <caret line="67" column="9" lean-forward="true" selection-start-line="67" selection-start-column="9" selection-end-line="67" selection-end-column="9" />
+          <caret line="66" column="9" lean-forward="true" selection-start-line="66" selection-start-column="9" selection-end-line="66" selection-end-column="9" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/company/RUDPClient.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="7" column="25" lean-forward="true" selection-start-line="7" selection-start-column="25" selection-end-line="7" selection-end-column="25" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
