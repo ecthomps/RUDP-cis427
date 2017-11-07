@@ -43,7 +43,7 @@
       </split-first>
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="RUDPClient.java" pinned="false" current-in-tab="true">
+          <file leaf-file-name="RUDPClient.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/com/company/RUDPClient.java">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="34">
@@ -55,7 +55,7 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="Segment.java" pinned="false" current-in-tab="false">
+          <file leaf-file-name="Segment.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/com/company/Segment.java">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="85">
@@ -473,7 +473,14 @@
       <option name="project" value="LOCAL" />
       <updated>1510032632671</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="complete clientServer">
+      <created>1510032727606</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1510032727606</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -647,14 +654,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/company/Segment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="17" lean-forward="false" selection-start-line="5" selection-start-column="17" selection-end-line="5" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/alice.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
@@ -678,6 +677,14 @@
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/company/Segment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="17" lean-forward="false" selection-start-line="5" selection-start-column="17" selection-end-line="5" selection-end-column="17" />
+          <folding />
         </state>
       </provider>
     </entry>
