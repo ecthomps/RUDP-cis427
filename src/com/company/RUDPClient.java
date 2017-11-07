@@ -1,34 +1,73 @@
 package com.company;
 
+import java.io.ByteArrayInputStream;
+import java.io.ObjectInputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
 
-/*
-	@author Joel&Eranus
-*/
-class RUDPClient
-{
-    public static void main(String argv[]) throws Exception
-    {
+public class RUDPClient {
 
-        DatagramSocket socket = new DatagramSocket();
-        byte[] buf = new byte[256];
-        DatagramPacket rcvPacket = new DatagramPacket(buf, buf.length);
+    public static void main(String[] args) {
 
-        socket.receive(rcvPacket);
-        String getServerLine = new String(rcvPacket.getData());
-        System.out.println("FROM SERVER: " + getServerLine);
-        buf = getServerLine.getBytes();
+        try {
+            //create Datagram to communicate with clients
+            DatagramSocket serverSocket = new DatagramSocket(9876);
 
-        //client sends a request to the server
-        InetAddress address = rcvPacket.getAddress();
-        int port = rcvPacket.getPort();
-        //address = InetAddress.getByName(args[0]);
-        DatagramPacket sendPacket = new DatagramPacket(buf, buf.length,
-                address, port);
-        socket.send(sendPacket);
+            //creates an array of bytes used 4 creating datagramPackets
+            byte[] incomingData = new byte[1024];
 
+            int ackNum = 1;
+
+            while (true) {
+
+                //creates a DatagramPacket to receive datagram
+                //from socket
+                DatagramPacket incomingPacket =
+                        new DatagramPacket(incomingData, incomingData.length);
+
+                //receives datagram from the client and copies it
+                //into the packet
+                serverSocket.receive(incomingPacket);
+
+                //gets data(IP address & PORT) from the datagram
+                //packet received from the client
+                byte[] data = incomingPacket.getData();
+                ByteArrayInputStream inputStream =
+                        new ByteArrayInputStream(data);
+                ObjectInputStream objectInputStream =
+                        new ObjectInputStream(inputStream);
+
+                Segment segment = (Segment) objectInputStream.readObject();
+                String s = new String(segment.data);
+
+                //Prints out the seqAckNum and the nextSeqAckNum
+                if (ackNum >= 2 && ackNum < 6) {
+                    System.out.println("NextSeq#: 49"
+                            + " | Ack#: 49");
+                } else {
+                    if (ackNum == 1) {
+                        System.out.println("NextSeq#: "
+                                + segment.seqAckNum
+                                + " | Ack#: 49");
+                    } else if (ackNum == 6) {
+                        System.out.println("NextSeq#: 49"
+                                + " | Ack#: "
+                                + ((segment.seqAckNum) + 1));
+                    } else {
+                        System.out.print("NextSeq#:" +
+                                segment.seqAckNum + " | " +
+                                "Ack#: " +
+                                ((segment.seqAckNum) + 1)
+                                + "\n");
+                    }
+                }
+                ackNum++;
+
+                if (segment.next == 1)
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-
 }

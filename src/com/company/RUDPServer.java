@@ -2,75 +2,91 @@ package com.company;
 
 
 import java.io.BufferedReader;
-import java.io.IOException;
+import java.io.ByteArrayOutputStream;
+import java.io.FileReader;
+import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.util.Timer;
-import java.util.concurrent.Semaphore;
+import java.util.ArrayList;
+import java.util.Random;
 
-/*
-	@author Joel&Eranus
-*/
-class RUDPServer
-{
+public class RUDPServer {
 
-    static int win_size = 10;
-    static int timeoutVal = 300;		// 300ms until timeout
-    static Timer timer;
-    static int base;					// base sequence number of window
-    static int nextSeqNum = 0;                // next sequence number in window
-    static BufferedReader getLine;  //reads user lines from text file
-    static byte[] sendData = new byte[256];
+    public static void main(String[] arg) {
 
-    /*Not so sure about semaphore*/
-    Semaphore s;				// guard CS for base, nextSeqNum
-    static boolean isTransferComplete;         	// if receiver has completely received the file
+        ArrayList<Segment> segmentArrayList = new ArrayList<>();
 
-    boolean inThreadDone = true;
-    boolean outThreadDone = true;
+        try {
+            //Binds datagramSocket to any localHost
+            DatagramSocket clientSocket = new DatagramSocket();
+            InetAddress IP = InetAddress.getByName("localhost");
+            byte[] incomingData = new byte[1024];
 
+            //reads file into bufferReader
+            BufferedReader br = new BufferedReader(new FileReader("alice.txt"));
 
-    public static void main(String[] args) throws IOException {
+            String line;
+            int seqNr = 0;
 
-        String userInput = "";
+            //adds line into segmentArrayList while
+            //line != null
+            while ((line = br.readLine()) != null) {
+                line += '\n';
+                Segment segment = new Segment();
+                segment.seqAckNum = seqNr;
+                segment.data = line.getBytes();
+                segmentArrayList.add(segment);
+                seqNr += segment.data.length;
+            }
 
-        //opens a bufferedReader on a file name alice.txt
-//        try {
-//            BufferedReader inputStream = new BufferedReader(new FileReader("alice.txt"));
-//            getLine = inputStream;
-//
-//        } catch (FileNotFoundException e) {
-//            System.err.println("Couldn't open quote file.  Serving time instead.");
-//        }
+            int windowSize = 0;
+            byte[] receiveData = new byte[1024];
 
+            //creates a "receive" packet and uses the DatagramSocket
+            //receive method to receive the reply from the server
+            for (Segment s : segmentArrayList) {
+                if (s == segmentArrayList.get(segmentArrayList.size() - 1))
+                    s.next = 1;
 
-        DatagramSocket skt = new DatagramSocket(9876);
-        byte[] sendData = new byte[1024];
-
-        //server receives request from client
-        byte[] buf = new byte[1024];
-        DatagramPacket packet = new DatagramPacket(buf, buf.length);
-        //copies info from client into pkt
-        skt.receive(packet);
-
-        //sends response to Client over DatagramSocket
-        InetAddress address = packet.getAddress();
-        int port = packet.getPort();
-        packet = new DatagramPacket(buf, buf.length, address, port);
-        skt.send(packet);
-
-        while (true) {
-
-            String sentence = new String(packet.getData());
-            System.out.println("RECEIVED: " + sentence);
-            System.out.println(nextSeqNum + packet.getLength());
-
-            nextSeqNum += packet.getLength();
-            //userInput = getLine.readLine();
-
-            skt.close();
+//                if(windowSize < 13) {
+                sendSegment(s, clientSocket, IP);
+                windowSize++;
+//                }
+//                }else if(windowSize >= 6) {
+//                    // Receive the server's packet
+//                    DatagramPacket received = new DatagramPacket(receiveData, receiveData.length);
+//                    clientSocket.receive(received);
+//                }
+//                windowSize++;
+                Random rand = new Random();
+                Thread.sleep(rand.nextInt(50 - 30) + 30);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
-}
 
+    public static void sendSegment(Segment s, DatagramSocket clientSocket, InetAddress IP) {
+        try {
+            ByteArrayOutputStream outputStream =
+                    new ByteArrayOutputStream();
+            ObjectOutputStream objectOutputStream =
+                    new ObjectOutputStream(outputStream);
+            objectOutputStream.writeObject(s);
+
+            //creates DatagramPacket destined for the IP and Port on
+            //the host
+            byte[] data = outputStream.toByteArray();
+            DatagramPacket sendPacket =
+                    new DatagramPacket(data, data.length, IP, 9876);
+
+            //sends a request to the server for information
+            clientSocket.send(sendPacket);
+            System.out.println("packet sent : " + s.seqAckNum);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+}
